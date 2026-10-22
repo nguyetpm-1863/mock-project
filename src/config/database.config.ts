@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import type { DataSourceOptions } from 'typeorm';
+import { User } from '../modules/users/entities/user.entity.js';
 import { requireEnv } from './require-env.js';
 
 export default registerAs('database', (): DataSourceOptions => ({
@@ -11,7 +12,9 @@ export default registerAs('database', (): DataSourceOptions => ({
   database: requireEnv('DB_DATABASE'),
   logging: process.env.DB_LOGGING === 'true',
   ssl: process.env.DB_SSL === 'true',
-  entities: [],
+  uuidExtension: 'pgcrypto',
+  installExtensions: false,
+  entities: [User],
   migrations: [`${import.meta.dirname}/../database/migrations/*.js`],
   synchronize: false,
 }));

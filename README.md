@@ -39,6 +39,15 @@ npm run start:dev
 | `npm run migration:run` | Run migrations |
 | `npm run migration:revert` | Revert last migration |
 
+## API
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| `POST` | `/api/auth/register` | - | Create account (no token, call login next) |
+| `POST` | `/api/auth/login` | - | Sign in, returns access token |
+| `POST` | `/api/auth/logout` | Bearer | Sign out from all devices |
+| `GET` | `/api/health` | - | Health check |
+
 ## Project structure
 
 ```
@@ -47,7 +56,7 @@ src/
 ├── setup-app.ts      # helmet, CORS, /api prefix, validation (422), error filter, swagger
 ├── app.module.ts     # Root module
 ├── config/           # Env config + Joi validation (app, database, auth, redis)
-├── common/           # Shared constants, error filter, transforms, validation helpers
+├── common/           # Shared constants, interfaces, utils, errors, decorators, DTOs
 ├── database/         # TypeORM module, data source, migrations
 ├── redis/            # Global Redis client
 └── modules/          # Feature modules
