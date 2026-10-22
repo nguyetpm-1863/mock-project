@@ -1,2 +1,0 @@
-export const JWT_SECRET_MIN_LENGTH = 32;
-export const DEFAULT_JWT_EXPIRES_IN_SECONDS = 86_400;

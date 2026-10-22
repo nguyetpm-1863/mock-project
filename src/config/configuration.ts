@@ -3,7 +3,7 @@ import { DEFAULT_AUTH_RATE_LIMIT } from '../common/constants/app.constants.js';
 import {
   DEFAULT_JWT_EXPIRES_IN_SECONDS,
   JWT_SECRET_MIN_LENGTH,
-} from '../modules/auth/constants/auth.constants.js';
+} from '../common/constants/auth.constants.js';
 
 export interface AppConfig {
   nodeEnv: string;
