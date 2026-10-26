@@ -6,14 +6,11 @@ import type { CreateUserInput } from '../../common/interfaces/create-user-input.
 import type { ListUsersQuery } from '../../common/interfaces/list-users-query.interface.js';
 import type { Paginated } from '../../common/interfaces/paginated.interface.js';
 import type { UserResponse } from '../../common/interfaces/user-response.interface.js';
+import type { UserRow } from '../../common/interfaces/user-row.interface.js';
 import { toUserResponse } from '../../common/mappers/user.mapper.js';
 import { containsPattern } from '../../common/utils/escape-like.util.js';
 import { toPaginated, toSkip } from '../../common/utils/pagination.util.js';
 import { User } from './entities/user.entity.js';
-
-interface UserRow extends Omit<UserResponse, 'createdAt'> {
-  created_at: Date;
-}
 
 @Injectable()
 export class UsersService {
@@ -48,7 +45,7 @@ export class UsersService {
     page,
     limit,
     role,
-    q,
+    keyword,
   }: ListUsersQuery): Promise<Paginated<UserResponse>> {
     const query = this.usersRepository
       .createQueryBuilder('user')
@@ -59,14 +56,14 @@ export class UsersService {
     if (role) {
       query.andWhere('user.role = :role', { role });
     }
-    if (q) {
+    if (keyword) {
       query.andWhere(
         new Brackets((search) =>
           search
             .where('user.email ILIKE :pattern')
             .orWhere('user.name ILIKE :pattern'),
         ),
-        { pattern: containsPattern(q) },
+        { pattern: containsPattern(keyword) },
       );
     }
     const [users, total] = await query.getManyAndCount();

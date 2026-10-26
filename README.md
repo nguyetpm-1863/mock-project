@@ -46,7 +46,7 @@ npm run start:dev
 | `POST` | `/api/auth/register` | - | Create account (no token, call login next) |
 | `POST` | `/api/auth/login` | - | Sign in, returns access token |
 | `POST` | `/api/auth/logout` | Bearer | Sign out from all devices |
-| `GET` | `/api/admin/users` | Admin | List users (pagination, `role` filter, `q` search) |
+| `GET` | `/api/admin/users` | Admin | List users (pagination, `role` filter, `keyword` search) |
 | `PATCH` | `/api/admin/users/:id/role` | Admin | Change a user's role (not your own) |
 | `GET` | `/api/health` | - | Health check |
 

@@ -4,5 +4,5 @@ export interface ListUsersQuery {
   page: number;
   limit: number;
   role?: UserRole;
-  q?: string;
+  keyword?: string;
 }

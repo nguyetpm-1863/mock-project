@@ -1,14 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { requireEnv } from './require-env.js';
-
-export interface RedisConfig {
-  host: string;
-  port: number;
-  db: number;
-  keyPrefix: string;
-  password?: string;
-  tls?: object;
-}
+import type { RedisConfig } from '../common/interfaces/redis-config.interface.js';
 
 export default registerAs('redis', (): RedisConfig => ({
   host: requireEnv('REDIS_HOST'),

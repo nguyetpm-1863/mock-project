@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { ApiErrors } from '../errors/api-errors.js';
+import type { ApiErrors } from '../interfaces/api-errors.interface.js';
 
 export class ApiErrorsResponseDto {
   @ApiProperty({

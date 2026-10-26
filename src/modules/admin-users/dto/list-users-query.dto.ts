@@ -24,5 +24,5 @@ export class ListUsersQueryDto
   @IsOptional()
   @IsString()
   @MaxLength(USER_SEARCH_MAX_LENGTH)
-  q?: string;
+  keyword?: string;
 }

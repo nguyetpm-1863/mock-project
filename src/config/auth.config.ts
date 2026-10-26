@@ -1,10 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { requireEnv } from './require-env.js';
-
-export interface AuthConfig {
-  jwtSecret: string;
-  jwtExpiresIn: number;
-}
+import type { AuthConfig } from '../common/interfaces/auth-config.interface.js';
 
 export default registerAs('auth', (): AuthConfig => ({
   jwtSecret: requireEnv('JWT_SECRET'),

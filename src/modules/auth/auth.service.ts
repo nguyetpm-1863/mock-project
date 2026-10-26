@@ -19,7 +19,7 @@ import { UserCreationFailedError } from '../../common/errors/user-creation-faile
 import type { AuthResponse } from '../../common/interfaces/auth-response.interface.js';
 import type { RegisterResponse } from '../../common/interfaces/register-response.interface.js';
 import { toUserResponse } from '../../common/mappers/user.mapper.js';
-import type { AuthConfig } from '../../config/auth.config.js';
+import type { AuthConfig } from '../../common/interfaces/auth-config.interface.js';
 import type { User } from '../users/entities/user.entity.js';
 import { UsersService } from '../users/users.service.js';
 import { LoginDto } from './dto/login.dto.js';

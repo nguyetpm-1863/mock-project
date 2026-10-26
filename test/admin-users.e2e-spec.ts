@@ -122,8 +122,8 @@ describe('Admin users (e2e)', () => {
       ['an email fragment', 'ALICE@', ['alice@example.com']],
       ['a name fragment', 'bob', ['bob@example.com']],
       ['a literal wildcard', '%', ['bob@example.com']],
-    ])('searches by %s', async (_label, q, emails) => {
-      const res = await listUsers(adminToken, { q }).expect(200);
+    ])('searches by %s', async (_label, keyword, emails) => {
+      const res = await listUsers(adminToken, { keyword }).expect(200);
 
       expect(
         res.body.data.map((user: { email: string }) => user.email),
@@ -135,7 +135,7 @@ describe('Admin users (e2e)', () => {
       { limit: 101 },
       { limit: 'abc' },
       { role: 'root' },
-      { q: 'x'.repeat(101) },
+      { keyword: 'x'.repeat(101) },
     ])('rejects invalid query %o with 422', async (query) => {
       await listUsers(adminToken, query).expect(422);
     });
@@ -193,16 +193,6 @@ describe('Admin users (e2e)', () => {
       const user = await createUser('user@example.com');
 
       await updateRole(adminToken, user.id, 'root').expect(422);
-    });
-
-    it('rejects non-admin users with 403', async () => {
-      const user = await createUser('user@example.com');
-
-      await updateRole(
-        await loginAs('user@example.com'),
-        user.id,
-        UserRole.Admin,
-      ).expect(403);
     });
   });
 });

@@ -6,7 +6,7 @@ import {
   JWT_AUDIENCE,
   JWT_ISSUER,
 } from '../../common/constants/auth.constants.js';
-import type { AuthConfig } from '../../config/auth.config.js';
+import type { AuthConfig } from '../../common/interfaces/auth-config.interface.js';
 import { UsersModule } from '../users/users.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';

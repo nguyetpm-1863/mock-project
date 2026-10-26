@@ -12,7 +12,8 @@ import {
   INTERNAL_ERROR_MESSAGE,
   RESOURCE_ERROR_FIELD,
 } from '../constants/error-messages.constants.js';
-import { type ApiErrors, isApiErrorsBody } from '../errors/api-errors.js';
+import { isApiErrorsBody } from '../errors/api-errors.js';
+import type { ApiErrors } from '../interfaces/api-errors.interface.js';
 
 const RESOURCE_STATUSES = new Set<number>([
   HttpStatus.FORBIDDEN,

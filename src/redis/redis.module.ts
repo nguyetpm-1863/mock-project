@@ -1,7 +1,7 @@
 import { Global, Inject, Module, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
-import type { RedisConfig } from '../config/redis.config.js';
+import type { RedisConfig } from '../common/interfaces/redis-config.interface.js';
 import { REDIS_CLIENT } from './redis.constants.js';
 
 @Global()

@@ -10,7 +10,7 @@ import helmet from 'helmet';
 import { apiErrors } from './common/errors/api-errors.js';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter.js';
 import { formatValidationErrors } from './common/validation/format-validation-errors.js';
-import type { AppConfig } from './config/configuration.js';
+import type { AppConfig } from './common/interfaces/app-config.interface.js';
 
 export function setupApp(app: INestApplication): AppConfig {
   const config = app.get(ConfigService).getOrThrow<AppConfig>('app');
