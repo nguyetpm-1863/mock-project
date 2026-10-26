@@ -46,7 +46,17 @@ npm run start:dev
 | `POST` | `/api/auth/register` | - | Create account (no token, call login next) |
 | `POST` | `/api/auth/login` | - | Sign in, returns access token |
 | `POST` | `/api/auth/logout` | Bearer | Sign out from all devices |
+| `GET` | `/api/admin/users` | Admin | List users (pagination, `role` filter, `q` search) |
+| `PATCH` | `/api/admin/users/:id/role` | Admin | Change a user's role (not your own) |
 | `GET` | `/api/health` | - | Health check |
+
+### First admin account
+
+```bash
+ADMIN_EMAIL=admin@example.com ADMIN_NAME="Admin" ADMIN_PASSWORD='<strong password>' npm run seed:admin
+```
+
+Creates the account with the `admin` role, or promotes an existing account with that email.
 
 ## Project structure
 

@@ -9,5 +9,6 @@ export default defineConfig({
     include: ['**/*.e2e-spec.ts'],
     globalSetup: ['./test/support/global-setup.ts'],
     env: { NODE_ENV: 'test' },
+    fileParallelism: false,
   },
 });

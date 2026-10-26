@@ -11,6 +11,7 @@ import { UsersModule } from '../users/users.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { RolesGuard } from './guards/roles.guard.js';
 import { LoginAttemptsService } from './login-attempts.service.js';
 import { PasswordService } from './password.service.js';
 
@@ -38,7 +39,13 @@ import { PasswordService } from './password.service.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LoginAttemptsService, PasswordService, JwtAuthGuard],
-  exports: [JwtModule, JwtAuthGuard, UsersModule],
+  providers: [
+    AuthService,
+    LoginAttemptsService,
+    PasswordService,
+    JwtAuthGuard,
+    RolesGuard,
+  ],
+  exports: [JwtModule, JwtAuthGuard, RolesGuard, UsersModule],
 })
 export class AuthModule {}

@@ -86,6 +86,7 @@ describe('Auth (e2e)', () => {
           id: expect.any(String),
           email: account.email,
           name: account.name,
+          role: 'user',
           createdAt: expect.any(String),
         },
       });
@@ -140,6 +141,7 @@ describe('Auth (e2e)', () => {
           id: expect.any(String),
           email: account.email,
           name: account.name,
+          role: 'user',
           createdAt: expect.any(String),
         },
       });

@@ -10,6 +10,7 @@ import {
 import { PG_UNIQUE_VIOLATION } from '../../common/constants/database.constants.js';
 import { TAKEN_MESSAGE } from '../../common/constants/error-messages.constants.js';
 import { UserCreationFailedError } from '../../common/errors/user-creation-failed.error.js';
+import { UserRole } from '../../common/enums/user-role.enum.js';
 import type { User } from '../users/entities/user.entity.js';
 import { UsersService } from '../users/users.service.js';
 import { AuthService } from './auth.service.js';
@@ -43,6 +44,7 @@ describe('AuthService', () => {
       id: 'user-id',
       email: 'jane@example.com',
       name: 'Jane',
+      role: UserRole.User,
       passwordHash: storedHash,
       tokenVersion: 3,
       createdAt,
@@ -135,6 +137,7 @@ describe('AuthService', () => {
           id: 'user-id',
           email: 'jane@example.com',
           name: 'Jane',
+          role: UserRole.User,
           createdAt,
         },
       });
