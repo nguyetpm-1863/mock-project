@@ -3,6 +3,7 @@ import {
   USER_EMAIL_MAX_LENGTH,
   USER_NAME_MAX_LENGTH,
 } from '../constants/user.constants.js';
+import { UserRole } from '../enums/user-role.enum.js';
 import type { UserResponse } from '../interfaces/user-response.interface.js';
 
 export class UserResponseDto implements UserResponse {
@@ -18,6 +19,9 @@ export class UserResponseDto implements UserResponse {
 
   @ApiProperty({ maxLength: USER_NAME_MAX_LENGTH, example: 'Jane Doe' })
   name: string;
+
+  @ApiProperty({ enum: UserRole, enumName: 'UserRole', example: UserRole.User })
+  role: UserRole;
 
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt: Date;

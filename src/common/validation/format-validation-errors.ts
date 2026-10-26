@@ -1,6 +1,6 @@
 import type { ValidationError } from '@nestjs/common';
 import { BLANK_MESSAGE } from '../constants/error-messages.constants.js';
-import type { ApiErrors } from '../errors/api-errors.js';
+import type { ApiErrors } from '../interfaces/api-errors.interface.js';
 
 const BLANK_CONSTRAINTS = new Set(['isDefined', 'isNotEmpty']);
 

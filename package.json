@@ -22,7 +22,8 @@
     "lint:security": "sunlint --security --input=src",
     "migration:generate": "npm run build && typeorm -d dist/database/data-source.js migration:generate",
     "migration:run": "npm run build && typeorm -d dist/database/data-source.js migration:run",
-    "migration:revert": "npm run build && typeorm -d dist/database/data-source.js migration:revert"
+    "migration:revert": "npm run build && typeorm -d dist/database/data-source.js migration:revert",
+    "seed:admin": "npm run build && node dist/database/seeds/create-admin.js"
   },
   "dependencies": {
     "@nestjs/common": "^12.2.0",

@@ -4,15 +4,7 @@ import {
   DEFAULT_JWT_EXPIRES_IN_SECONDS,
   JWT_SECRET_MIN_LENGTH,
 } from '../common/constants/auth.constants.js';
-
-export interface AppConfig {
-  nodeEnv: string;
-  port: number;
-  apiPrefix: string;
-  corsOrigin: string | string[];
-  swaggerEnabled: boolean;
-  trustProxyHops: number;
-}
+import type { AppConfig } from '../common/interfaces/app-config.interface.js';
 
 const ANY_ORIGIN = '*';
 

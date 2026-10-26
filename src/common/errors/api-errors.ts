@@ -1,8 +1,7 @@
-export type ApiErrors = Record<string, string[]>;
-
-export interface ApiErrorsBody {
-  errors: ApiErrors;
-}
+import type {
+  ApiErrors,
+  ApiErrorsBody,
+} from '../interfaces/api-errors.interface.js';
 
 export const apiErrors = (errors: ApiErrors): ApiErrorsBody => ({ errors });
 

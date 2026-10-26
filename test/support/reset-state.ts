@@ -2,7 +2,7 @@ import type { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Redis } from 'ioredis';
 import { DataSource } from 'typeorm';
-import type { RedisConfig } from '../../src/config/redis.config.js';
+import type { RedisConfig } from '../../src/common/interfaces/redis-config.interface.js';
 import { REDIS_CLIENT } from '../../src/redis/redis.constants.js';
 
 export const resetState = async (app: INestApplication): Promise<void> => {

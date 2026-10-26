@@ -6,12 +6,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { USER_ROLE_ENUM_NAME } from '../../../common/constants/role.constants.js';
 import {
   USER_EMAIL_MAX_LENGTH,
   USER_NAME_MAX_LENGTH,
   USER_PASSWORD_HASH_MAX_LENGTH,
 } from '../../../common/constants/user.constants.js';
 import { INITIAL_TOKEN_VERSION } from '../../../common/constants/auth.constants.js';
+import { UserRole } from '../../../common/enums/user-role.enum.js';
 import type { UserResponse } from '../../../common/interfaces/user-response.interface.js';
 
 @Entity('users')
@@ -25,6 +27,14 @@ export class User implements UserResponse {
 
   @Column({ type: 'varchar', length: USER_NAME_MAX_LENGTH })
   name: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    enumName: USER_ROLE_ENUM_NAME,
+    default: UserRole.User,
+  })
+  role: UserRole;
 
   @Column({
     name: 'password_hash',
