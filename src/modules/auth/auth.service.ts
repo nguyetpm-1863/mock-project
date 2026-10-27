@@ -27,7 +27,7 @@ import { UserCreationFailedError } from '../../common/errors/user-creation-faile
 import type { AuthContext } from '../../common/interfaces/auth-context.interface.js';
 import type { AuthResponse } from '../../common/interfaces/auth-response.interface.js';
 import type { RegisterResponse } from '../../common/interfaces/register-response.interface.js';
-import type { TokenSubject } from '../../common/interfaces/token-subject.interface.js';
+import type { UserResponse } from '../../common/interfaces/user-response.interface.js';
 import { toUserResponse } from '../../common/mappers/user.mapper.js';
 import type { AuthConfig } from '../../common/interfaces/auth-config.interface.js';
 import { UsersService } from '../users/users.service.js';
@@ -83,7 +83,7 @@ export class AuthService implements OnModuleInit {
     }
 
     const [response] = await Promise.all([
-      this.buildAuthResponse(user),
+      this.buildAuthResponse(user, user.tokenVersion),
       this.loginAttempts.reset(email, attempts),
     ]);
     return response;
@@ -123,7 +123,7 @@ export class AuthService implements OnModuleInit {
       throw tokenError(INVALID_TOKEN_MESSAGE);
     }
     const [response] = await Promise.all([
-      this.buildAuthResponse({ ...user, tokenVersion }),
+      this.buildAuthResponse(user, tokenVersion),
       this.loginAttempts.reset(user.email, attempts),
     ]);
     return response;
@@ -140,10 +140,13 @@ export class AuthService implements OnModuleInit {
     throw new UserCreationFailedError(error);
   }
 
-  private async buildAuthResponse(user: TokenSubject): Promise<AuthResponse> {
+  private async buildAuthResponse(
+    user: UserResponse,
+    tokenVersion: number,
+  ): Promise<AuthResponse> {
     const { jwtExpiresIn } = this.configService.getOrThrow<AuthConfig>('auth');
     const accessToken = await this.jwtService.signAsync(
-      { sub: user.id, ver: user.tokenVersion },
+      { sub: user.id, ver: tokenVersion },
       { expiresIn: jwtExpiresIn },
     );
     return {
