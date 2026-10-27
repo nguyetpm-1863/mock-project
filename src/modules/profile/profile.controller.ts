@@ -21,8 +21,8 @@ import { AuthService } from '../auth/auth.service.js';
 import { AuthResponseDto } from '../auth/dto/auth-response.dto.js';
 import { ChangePasswordDto } from '../auth/dto/change-password.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { UsersService } from '../users/users.service.js';
 import { UpdateProfileDto } from './dto/update-profile.dto.js';
-import { ProfileService } from './profile.service.js';
 
 @ApiTags('profile')
 @Controller('me')
@@ -34,7 +34,7 @@ import { ProfileService } from './profile.service.js';
 })
 export class ProfileController {
   constructor(
-    private readonly profileService: ProfileService,
+    private readonly usersService: UsersService,
     private readonly authService: AuthService,
   ) {}
 
@@ -58,7 +58,7 @@ export class ProfileController {
     @CurrentAuth() { user }: AuthContext,
     @Body() { name }: UpdateProfileDto,
   ): Promise<UserResponseDto> {
-    return this.profileService.updateName(user, name);
+    return this.usersService.updateName(user, name);
   }
 
   @Patch('password')

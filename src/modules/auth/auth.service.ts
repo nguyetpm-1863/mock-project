@@ -96,12 +96,13 @@ export class AuthService implements OnModuleInit {
     if (newPassword === currentPassword) {
       throw samePasswordError();
     }
-    const attempts = await this.loginAttempts.recordAttempt(user.email);
+    const [attempts, passwordHash] = await Promise.all([
+      this.loginAttempts.recordAttempt(user.email),
+      this.usersService.findPasswordHash(user.id, payload.ver),
+    ]);
     if (attempts > LOGIN_MAX_FAILED_ATTEMPTS) {
       throw loginLockedError();
     }
-
-    const passwordHash = await this.usersService.findPasswordHash(user.id);
     if (!passwordHash) {
       throw tokenError(INVALID_TOKEN_MESSAGE);
     }

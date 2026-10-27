@@ -229,6 +229,7 @@ describe('AuthService', () => {
       const [, currentVersion, newHash] = usersService.updatePassword.mock
         .calls[0] as [string, number, string];
       expect(currentVersion).toBe(3);
+      expect(usersService.findPasswordHash).toHaveBeenCalledWith('user-id', 3);
       expect(await argon2.verify(newHash, input.newPassword)).toBe(true);
       expect(jwtService.signAsync).toHaveBeenCalledWith(
         { sub: 'user-id', ver: 4 },
@@ -260,7 +261,7 @@ describe('AuthService', () => {
       expect(usersService.updatePassword).not.toHaveBeenCalled();
     });
 
-    it('locks after too many wrong attempts before reading the hash', async () => {
+    it('locks after too many wrong attempts without updating', async () => {
       loginAttempts.recordAttempt.mockResolvedValueOnce(
         LOGIN_MAX_FAILED_ATTEMPTS + 1,
       );
@@ -268,10 +269,10 @@ describe('AuthService', () => {
       await expect(service.changePassword(auth, input)).rejects.toMatchObject({
         status: 429,
       });
-      expect(usersService.findPasswordHash).not.toHaveBeenCalled();
+      expect(usersService.updatePassword).not.toHaveBeenCalled();
     });
 
-    it('rejects the token when the user is gone before the hash lookup', async () => {
+    it('rejects the token when the user is gone or the token is revoked', async () => {
       usersService.findPasswordHash.mockResolvedValueOnce(null);
 
       await expect(service.changePassword(auth, input)).rejects.toMatchObject({

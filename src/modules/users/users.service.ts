@@ -84,16 +84,22 @@ export class UsersService {
     return row ? toUserResponse({ ...row, createdAt: row.created_at }) : null;
   }
 
-  async updateName(id: string, name: string): Promise<boolean> {
-    const { affected } = await this.usersRepository.update({ id }, { name });
-    return affected === 1;
+  async updateName(user: UserResponse, name: string): Promise<UserResponse> {
+    await this.usersRepository.update({ id: user.id }, { name });
+    return toUserResponse({ ...user, name });
   }
 
-  async findPasswordHash(id: string): Promise<string | null> {
+  async findPasswordHash(
+    id: string,
+    tokenVersion: number,
+  ): Promise<string | null> {
     const row = await this.usersRepository
       .createQueryBuilder('user')
       .select('user.passwordHash', 'passwordHash')
-      .where('user.id = :id', { id })
+      .where('user.id = :id AND user.tokenVersion = :tokenVersion', {
+        id,
+        tokenVersion,
+      })
       .getRawOne<PasswordHashRow>();
     return row?.passwordHash ?? null;
   }
