@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import type { UserRole } from '../../common/enums/user-role.enum.js';
 import type { CreateUserInput } from '../../common/interfaces/create-user-input.interface.js';
+import type { PasswordHashRow } from '../../common/interfaces/password-hash-row.interface.js';
+import type { PasswordUpdateRow } from '../../common/interfaces/password-update-row.interface.js';
 import type { ListUsersQuery } from '../../common/interfaces/list-users-query.interface.js';
 import type { Paginated } from '../../common/interfaces/paginated.interface.js';
 import type { UserResponse } from '../../common/interfaces/user-response.interface.js';
@@ -80,5 +82,38 @@ export class UsersService {
       .execute();
     const [row] = raw as UserRow[];
     return row ? toUserResponse({ ...row, createdAt: row.created_at }) : null;
+  }
+
+  async updateName(id: string, name: string): Promise<boolean> {
+    const { affected } = await this.usersRepository.update({ id }, { name });
+    return affected === 1;
+  }
+
+  async findPasswordHash(id: string): Promise<string | null> {
+    const row = await this.usersRepository
+      .createQueryBuilder('user')
+      .select('user.passwordHash', 'passwordHash')
+      .where('user.id = :id', { id })
+      .getRawOne<PasswordHashRow>();
+    return row?.passwordHash ?? null;
+  }
+
+  async updatePassword(
+    id: string,
+    currentTokenVersion: number,
+    passwordHash: string,
+  ): Promise<number | null> {
+    const { raw } = await this.usersRepository
+      .createQueryBuilder()
+      .update()
+      .set({ passwordHash, tokenVersion: () => 'token_version + 1' })
+      .where('id = :id AND token_version = :currentTokenVersion', {
+        id,
+        currentTokenVersion,
+      })
+      .returning('token_version')
+      .execute();
+    const [row] = raw as PasswordUpdateRow[];
+    return row?.token_version ?? null;
   }
 }
