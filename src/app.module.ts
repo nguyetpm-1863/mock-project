@@ -13,6 +13,7 @@ import databaseConfig from './config/database.config.js';
 import redisConfig from './config/redis.config.js';
 import { DatabaseModule } from './database/database.module.js';
 import { AdminUsersModule } from './modules/admin-users/admin-users.module.js';
+import { ProfileModule } from './modules/profile/profile.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { RedisModule } from './redis/redis.module.js';
@@ -37,6 +38,7 @@ import { RedisModule } from './redis/redis.module.js';
     HealthModule,
     AuthModule,
     AdminUsersModule,
+    ProfileModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

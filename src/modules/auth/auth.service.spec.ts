@@ -30,6 +30,8 @@ describe('AuthService', () => {
     findByEmailWithPassword: vi.fn(),
     create: vi.fn(),
     incrementTokenVersion: vi.fn(),
+    findPasswordHash: vi.fn(),
+    updatePassword: vi.fn(),
   };
   const loginAttempts = { recordAttempt: vi.fn(), reset: vi.fn() };
   const jwtService = { signAsync: vi.fn() };
@@ -193,6 +195,97 @@ describe('AuthService', () => {
       expect(usersService.incrementTokenVersion).toHaveBeenCalledWith(
         'user-id',
       );
+    });
+  });
+
+  describe('changePassword', () => {
+    const auth = {
+      user: {
+        id: 'user-id',
+        email: 'jane@example.com',
+        name: 'Jane',
+        role: UserRole.User,
+        createdAt,
+      },
+      payload: {
+        sub: 'user-id',
+        ver: 3,
+        iss: 'iss',
+        aud: 'aud',
+        iat: 1,
+        exp: 2,
+      },
+    };
+    const input = { currentPassword: PASSWORD, newPassword: 'N3w!Passw0rd' };
+
+    beforeEach(() => {
+      usersService.findPasswordHash.mockResolvedValue(storedHash);
+      usersService.updatePassword.mockResolvedValue(4);
+    });
+
+    it('stores a new hash, bumps the token version and returns a fresh token', async () => {
+      const result = await service.changePassword(auth, input);
+
+      const [, currentVersion, newHash] = usersService.updatePassword.mock
+        .calls[0] as [string, number, string];
+      expect(currentVersion).toBe(3);
+      expect(usersService.findPasswordHash).toHaveBeenCalledWith('user-id', 3);
+      expect(await argon2.verify(newHash, input.newPassword)).toBe(true);
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        { sub: 'user-id', ver: 4 },
+        { expiresIn: EXPIRES_IN },
+      );
+      expect(result.accessToken).toBe('jwt-token');
+      expect(loginAttempts.reset).toHaveBeenCalledWith(auth.user.email, 1);
+    });
+
+    it('rejects a wrong current password without updating', async () => {
+      await expect(
+        service.changePassword(auth, {
+          ...input,
+          currentPassword: 'Wr0ng!Pass',
+        }),
+      ).rejects.toMatchObject({
+        status: 422,
+        response: { errors: { currentPassword: ['is incorrect'] } },
+      });
+      expect(usersService.updatePassword).not.toHaveBeenCalled();
+      expect(loginAttempts.reset).not.toHaveBeenCalled();
+    });
+
+    it('rejects reusing the current password without counting an attempt', async () => {
+      await expect(
+        service.changePassword(auth, { ...input, newPassword: PASSWORD }),
+      ).rejects.toMatchObject({ status: 422 });
+      expect(loginAttempts.recordAttempt).not.toHaveBeenCalled();
+      expect(usersService.updatePassword).not.toHaveBeenCalled();
+    });
+
+    it('locks after too many wrong attempts without updating', async () => {
+      loginAttempts.recordAttempt.mockResolvedValueOnce(
+        LOGIN_MAX_FAILED_ATTEMPTS + 1,
+      );
+
+      await expect(service.changePassword(auth, input)).rejects.toMatchObject({
+        status: 429,
+      });
+      expect(usersService.updatePassword).not.toHaveBeenCalled();
+    });
+
+    it('rejects the token when the user is gone or the token is revoked', async () => {
+      usersService.findPasswordHash.mockResolvedValueOnce(null);
+
+      await expect(service.changePassword(auth, input)).rejects.toMatchObject({
+        status: 401,
+      });
+    });
+
+    it('rejects the token when its version changed before the update', async () => {
+      usersService.updatePassword.mockResolvedValueOnce(null);
+
+      await expect(service.changePassword(auth, input)).rejects.toMatchObject({
+        status: 401,
+      });
     });
   });
 });
