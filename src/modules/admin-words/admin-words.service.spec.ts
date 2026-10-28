@@ -9,14 +9,6 @@ describe('AdminWordsService', () => {
 
   beforeEach(() => vi.clearAllMocks());
 
-  it('rejects an update without any field before touching the database', async () => {
-    await expect(service.update('id', {})).rejects.toMatchObject({
-      status: 422,
-      response: { errors: { word: ["can't be blank"] } },
-    });
-    expect(wordsRepository.update).not.toHaveBeenCalled();
-  });
-
   it('returns the word from the single update query', async () => {
     const createdAt = new Date();
     const word = {

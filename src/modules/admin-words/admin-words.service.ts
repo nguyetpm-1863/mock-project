@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  emptyWordUpdateError,
-  wordNotFoundError,
-} from '../../common/errors/word-errors.js';
+import { wordNotFoundError } from '../../common/errors/word-errors.js';
 import type { ListAdminWordsQuery } from '../../common/interfaces/list-admin-words-query.interface.js';
 import type { Paginated } from '../../common/interfaces/paginated.interface.js';
 import type { WordSortField } from '../../common/interfaces/word-sort-field.type.js';
@@ -43,9 +40,6 @@ export class AdminWordsService {
   }
 
   async update(id: string, fields: Partial<WordInput>): Promise<WordResponse> {
-    if (fields.content === undefined && fields.meaning === undefined) {
-      throw emptyWordUpdateError();
-    }
     const word = await this.wordsRepository.update(id, fields);
     if (!word) {
       throw wordNotFoundError();
