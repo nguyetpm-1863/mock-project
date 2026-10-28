@@ -48,6 +48,11 @@ npm run start:dev
 | `POST` | `/api/auth/logout` | Bearer | Sign out from all devices |
 | `GET` | `/api/admin/users` | Admin | List users (pagination, `role` filter, `keyword` search) |
 | `PATCH` | `/api/admin/users/:id/role` | Admin | Change a user's role (not your own) |
+| `GET` | `/api/admin/words` | Admin | List words (pagination, `keyword` search, `sort`) |
+| `GET` | `/api/admin/words/:id` | Admin | Get a word |
+| `POST` | `/api/admin/words` | Admin | Create a word (`content`, `meaning`) |
+| `PATCH` | `/api/admin/words/:id` | Admin | Update content and/or meaning |
+| `DELETE` | `/api/admin/words/:id` | Admin | Soft delete a word |
 | `GET` | `/api/health` | - | Health check |
 
 ### First admin account
