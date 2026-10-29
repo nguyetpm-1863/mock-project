@@ -10,7 +10,7 @@ export const resetState = async (app: INestApplication): Promise<void> => {
   const { keyPrefix } = app.get(ConfigService).getOrThrow<RedisConfig>('redis');
   const keys = await redis.keys(`${keyPrefix}*`);
   await Promise.all([
-    app.get(DataSource).query('TRUNCATE TABLE users, words CASCADE'),
+    app.get(DataSource).query('TRUNCATE TABLE users, words, lessons CASCADE'),
     keys.length > 0
       ? redis.del(...keys.map((key) => key.slice(keyPrefix.length)))
       : Promise.resolve(0),

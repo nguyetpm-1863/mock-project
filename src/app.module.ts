@@ -12,6 +12,7 @@ import configuration, { envValidationSchema } from './config/configuration.js';
 import databaseConfig from './config/database.config.js';
 import redisConfig from './config/redis.config.js';
 import { DatabaseModule } from './database/database.module.js';
+import { AdminLessonsModule } from './modules/admin-lessons/admin-lessons.module.js';
 import { AdminWordsModule } from './modules/admin-words/admin-words.module.js';
 import { AdminUsersModule } from './modules/admin-users/admin-users.module.js';
 import { ProfileModule } from './modules/profile/profile.module.js';
@@ -41,6 +42,7 @@ import { RedisModule } from './redis/redis.module.js';
     AdminUsersModule,
     ProfileModule,
     AdminWordsModule,
+    AdminLessonsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
