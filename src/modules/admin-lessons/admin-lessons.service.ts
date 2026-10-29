@@ -103,7 +103,7 @@ export class AdminLessonsService {
   }
 
   private async findWords(wordIds: string[]): Promise<WordResponse[]> {
-    if (wordIds.length === 0) {
+    if (!wordIds.length) {
       return [];
     }
     const words = await this.wordsRepository.findByIds(wordIds);

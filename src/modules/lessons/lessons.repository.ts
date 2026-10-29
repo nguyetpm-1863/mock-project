@@ -78,7 +78,7 @@ export class LessonsRepository {
     wordIds: string[],
     manager: EntityManager,
   ): Promise<void> {
-    if (wordIds.length > 0) {
+    if (wordIds.length) {
       await manager
         .createQueryBuilder()
         .relation(Lesson, 'words')
