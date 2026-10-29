@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, type EntityManager, Repository } from 'typeorm';
+import { Brackets, type EntityManager, In, Repository } from 'typeorm';
+import { LESSON_WORDS_TABLE } from '../../common/constants/lesson.constants.js';
 import { WORD_RETURNING_COLUMNS } from '../../common/constants/word.constants.js';
 import type { WordInput } from '../../common/interfaces/word-input.interface.js';
 import type { ListAdminWordsQuery } from '../../common/interfaces/list-admin-words-query.interface.js';
@@ -46,6 +47,26 @@ export class WordsRepository {
 
   findById(id: string): Promise<Word | null> {
     return this.repository.findOneBy({ id });
+  }
+
+  findByIds(ids: string[]): Promise<Word[]> {
+    return this.repository.find({
+      where: { id: In(ids) },
+      order: { content: 'ASC' },
+    });
+  }
+
+  findByLesson(lessonId: string): Promise<Word[]> {
+    return this.repository
+      .createQueryBuilder('word')
+      .innerJoin(
+        LESSON_WORDS_TABLE,
+        'lessonWord',
+        'lessonWord.word_id = word.id',
+      )
+      .where('lessonWord.lesson_id = :lessonId', { lessonId })
+      .orderBy('word.content', 'ASC')
+      .getMany();
   }
 
   create(

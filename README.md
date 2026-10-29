@@ -53,6 +53,11 @@ npm run start:dev
 | `POST` | `/api/admin/words` | Admin | Create a word (`content`, `meaning`) |
 | `PATCH` | `/api/admin/words/:id` | Admin | Update content and/or meaning |
 | `DELETE` | `/api/admin/words/:id` | Admin | Soft delete a word |
+| `GET` | `/api/admin/lessons` | Admin | List lessons (pagination, `keyword` search on title, `sort`) |
+| `GET` | `/api/admin/lessons/:id` | Admin | Get a lesson with its words |
+| `POST` | `/api/admin/lessons` | Admin | Create a lesson (`title`, `description`, `wordIds`) |
+| `PATCH` | `/api/admin/lessons/:id` | Admin | Update a lesson; `wordIds` replaces its words |
+| `DELETE` | `/api/admin/lessons/:id` | Admin | Soft delete a lesson |
 | `GET` | `/api/health` | - | Health check |
 
 ### First admin account
